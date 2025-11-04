@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>MyExtension</RootNamespace>
+    <AssemblyName>MyExtension</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	<SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
+	<SGenKeyFile>sgKey.snk</SGenKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Scrutor" Version="4.2.2" />
+	  <PackageReference Include="DocsVision.BackOffice.Cards.Web" Version="6.1.716" />
+	  <PackageReference Include="DocsVision.Platform" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.CardLib" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.ObjectManager" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.ObjectManager.Rest" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.ObjectModel" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.StorageServer" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.SystemCards.ObjectModel" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.SystemObjects" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.Xml.Schemas" Version="6.1.374" />
+	  <PackageReference Include="DocsVision.Platform.WebClient" Version="6.1.716" />
+	  <PackageReference Include="DocsVision.WebClient.Extensibility" Version="6.1.716" />
+	  <PackageReference Include="DocsVision.WebFrame.WebClient" Version="6.1.716" />
+	  <PackageReference Include="DocsVision.WebClientLibrary.ObjectModel" Version="6.1.716" />
+	  <PackageReference Update="DocsVision.*" ExcludeAssets="contentFiles" IncludeAssets="compile" />
+  </ItemGroup>
+
+</Project>
