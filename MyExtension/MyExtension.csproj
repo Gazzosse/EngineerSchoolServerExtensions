@@ -5,6 +5,7 @@
     <RootNamespace>MyExtension</RootNamespace>
     <AssemblyName>MyExtension</AssemblyName>
 	<Nullable>enable</Nullable>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup>

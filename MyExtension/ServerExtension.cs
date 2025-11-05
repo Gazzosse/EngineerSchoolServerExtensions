@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using DocsVision.BackOffice.CardLib.CardDefs;
 using DocsVision.WebClient.Extensibility;
 using DocsVision.WebClient.Helpers;
+using DocsVision.WebClientLibrary.ObjectModel.Services.EntityLifeCycle;
 using Microsoft.Extensions.DependencyInjection;
 using MyExtension.ApplicationBusinessTrip;
 using System;
@@ -37,14 +39,16 @@ namespace MyExtension
         {
             services.AddSingleton<IApplicationBusinessTripService, ApplicationBusinessTripService>();
 
-            // Примеры регистрации различных типов ВК 
-            // services.AddSingleton<YourServiceInterface, YourServiceClass>();
-            // services.AddSingleton<IBindingConverter, YourBindingConverterType>();
-            // services.AddSingleton<IBindingResolver, YourBindingResolverType>();            
-            // services.AddSingleton<IControlResolver, YourControlResolverType>();
-            // services.AddSingleton<IPropertyResolver, YourPropertyResolverType>();  
-            // services.AddTransient<ICardLifeCycle, YourCardLifeCycle>();
-            // services.AddTransient<IRowLifeCycle, YourRowLifeCycle>(); 
+            services.Decorate<ICardLifeCycleEx>((original, serviceProvider) => {
+                var typeId = original.CardTypeId;
+                if (typeId == CardDocument.ID)
+                {
+                    var applicationBusinessTripService = serviceProvider.GetRequiredService<IApplicationBusinessTripService>();
+                    return new ApplicationBusinessTripLifeCycle(original, applicationBusinessTripService);
+                }
+                return original;
+            });
+
         }
 
         /// <summary>

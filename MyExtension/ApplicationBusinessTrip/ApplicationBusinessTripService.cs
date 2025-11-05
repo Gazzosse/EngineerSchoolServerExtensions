@@ -1,5 +1,8 @@
-﻿using DocsVision.BackOffice.ObjectModel;
+﻿using DocsVision.BackOffice.CardLib.CardDefs;
+using DocsVision.BackOffice.ObjectModel;
 using DocsVision.BackOffice.ObjectModel.Services;
+using DocsVision.BackOffice.WebClient.State;
+using DocsVision.Layout.WebClient.AdvancedLayouts.ExtendedDataSources;
 using DocsVision.Platform.WebClient;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using MyExtension.ApplicationBusinessTrip.Models;
@@ -17,8 +20,6 @@ namespace MyExtension.ApplicationBusinessTrip
         {
 
             var staffService = sessionContext.ObjectContext.GetService<IStaffService>();
-
-            //var unit = sessionContext.ObjectContext.GetObject<StaffUnit>(employeeUnitId) ?? throw new ArgumentException("Invalid unit id");
 
             var secondedEmployee = staffService.Get(employeeId) ?? throw new ArgumentException($"Invalid employee id {employeeId}");
 
@@ -48,6 +49,36 @@ namespace MyExtension.ApplicationBusinessTrip
             {
                 Expenses = expenses
             };
+        }
+
+        public void InitApplication(SessionContext sessionContext, Guid cardId)
+        {   
+            var card = sessionContext.ObjectContext.GetObject<Document>(cardId);
+            var staffService = sessionContext.ObjectContext.GetService<IStaffService>();
+
+            var currentEmployee = staffService.GetCurrentEmployee();
+            var manager = staffService.GetEmployeeManager(currentEmployee);
+
+            card.MainInfo["SecondedEmployee"] = currentEmployee.GetObjectId();
+            card.MainInfo["Manager"] = manager.GetObjectId();
+            card.MainInfo["WorkPhoneNumber"] = manager.Phone;
+
+            var secretaryGroup = staffService.FindGroupByName(null, "Секретарь");
+            var availableSecretary = staffService.GetGroupEmployees(secretaryGroup, true, true, true).FirstOrDefault();
+
+            var arrangers = (IList<BaseCardSectionRow>)card.GetSection(new Guid("D8A59AFE-3118-4AEB-9419-59DE69D4B622"));
+            var arrangerRow = new BaseCardSectionRow();
+            arrangerRow["Arranger"] = availableSecretary?.GetObjectId();
+            arrangers.Add(arrangerRow);
+
+            var approvers = (IList<BaseCardSectionRow>)card.GetSection(CardDocument.Approvers.ID);
+            var approverRow = new BaseCardSectionRow();
+            approverRow["Approver"] = currentEmployee.GetObjectId() == manager.GetObjectId()
+                ? staffService.GetUnits(null, true).First().Manager.GetObjectId()
+                : manager.GetObjectId();
+            approvers.Add(approverRow);
+
+            sessionContext.ObjectContext.SaveObject(card);
         }
     }
 }
