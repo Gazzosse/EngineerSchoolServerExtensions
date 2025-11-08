@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DocsVision.BackOffice.CardLib.CardDefs;
+using DocsVision.Layout.WebClient.Services;
 using DocsVision.WebClient.Extensibility;
 using DocsVision.WebClient.Helpers;
 using DocsVision.WebClientLibrary.ObjectModel.Services.EntityLifeCycle;
@@ -38,6 +39,7 @@ namespace MyExtension
         public override void InitializeServiceCollection(IServiceCollection services)
         {
             services.AddSingleton<IApplicationBusinessTripService, ApplicationBusinessTripService>();
+            services.AddSingleton<IDataGridControlPlugin, ApplicationBusinessTripPlugin>();
 
             services.Decorate<ICardLifeCycleEx>((original, serviceProvider) => {
                 var typeId = original.CardTypeId;

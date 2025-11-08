@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <SignAssembly>True</SignAssembly>
+	<AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="DocsVision.Platform.StorageServer" Version="6.1.374" />
+		<PackageReference Include="DocsVision.Platform.StorageServer.Data" Version="6.1.374" />
+		<PackageReference Include="DocsVision.Platform.StorageServer.Runtime" Version="6.1.374" />
+		<PackageReference Update="DocsVision.*" ExcludeAssets="contentFiles" IncludeAssets="compile" />
+	</ItemGroup>
+	
+</Project>
