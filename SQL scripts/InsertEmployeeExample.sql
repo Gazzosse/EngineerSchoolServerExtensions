@@ -1,6 +1,6 @@
 SELECT public."InsertBulkEmployees"(
-    ARRAY['d3638aab-f804-42c2-86da-7ba0aada9ab6'::UUID],
-	ARRAY['Константин'],
-	ARRAY['Маратович'],
-	ARRAY['Галиулин']
+    ARRAY['Тестовая группа 1'],
+	ARRAY['Иван'],
+	ARRAY['Иванович'],
+	ARRAY['Иванов']
 ) as inserted_count;

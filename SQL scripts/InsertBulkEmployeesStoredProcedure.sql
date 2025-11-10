@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION public."InsertBulkEmployees"(
-    parent_row_ids UUID[],
+    department_names TEXT[],
     first_names TEXT[],
     middle_names TEXT[],
     last_names TEXT[]
@@ -10,9 +10,9 @@ CREATE OR REPLACE FUNCTION public."InsertBulkEmployees"(
 	DECLARE
 	    inserted_count BIGINT;
 	BEGIN
-	    IF array_length(parent_row_ids, 1) != array_length(first_names, 1)
-	       OR array_length(parent_row_ids, 1) != array_length(middle_names, 1)
-	       OR array_length(parent_row_ids, 1) != array_length(last_names, 1) THEN
+	    IF array_length(department_names, 1) != array_length(first_names, 1)
+	       OR array_length(department_names, 1) != array_length(middle_names, 1)
+	       OR array_length(department_names, 1) != array_length(last_names, 1) THEN
 	        RAISE EXCEPTION 'Все массивы должны быть одинаковой длины';
 	    END IF;
 	    
@@ -32,7 +32,7 @@ CREATE OR REPLACE FUNCTION public."InsertBulkEmployees"(
 	    )
 	    SELECT 
 	        '00000000-0000-0000-0000-000000000000'::UUID,
-	        parent_row_id,
+	        d."RowID",
 	        '4fbfcd90-945e-4497-ac3d-61104410e6a9'::UUID,
 	        first_name,
 	        middle_name, 
@@ -43,9 +43,11 @@ CREATE OR REPLACE FUNCTION public."InsertBulkEmployees"(
 	        '0',
 	        'false',
 	        '0'
-	    FROM UNNEST(parent_row_ids, first_names, middle_names, last_names) 
-	         AS t(parent_row_id, first_name, middle_name, last_name);
-	    
+	    FROM UNNEST(department_names, first_names, middle_names, last_names) 
+	         AS t(department_name, first_name, middle_name, last_name)
+	    JOIN public."dvtable_{7473f07f-11ed-4762-9f1e-7ff10808ddd1}" d 
+        	ON d."Name" = department_name;
+			
 	    GET DIAGNOSTICS inserted_count = ROW_COUNT;
 	    
 	    UPDATE dvsys_instances_date

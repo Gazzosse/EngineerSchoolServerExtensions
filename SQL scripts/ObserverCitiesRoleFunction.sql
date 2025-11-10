@@ -11,7 +11,6 @@ BEGIN
 	JOIN public."observer_cities" observer_cities
 		ON observer_cities."CityRowID" = main_info."Cities"
 	WHERE main_info."Kind" = '6cf0521a-a2f2-4595-a65b-3c26f17f60a8'
- 		AND observer_cities."IsObserver" = true
 		AND main_info."InstanceID" = ANY(val_cardids);
 END;
 $function$
