@@ -12,6 +12,7 @@ namespace MyExtension.ApplicationBusinessTrip
     {
         OnSecondedEmployeeFieldChangeResponse SetOnChange(SessionContext sessionContext, Guid employeeId);
         SetExpensesResponse CalculateExpenses(SessionContext sessionContext, string cityName, int duration);
+        Task<GetTicketsCostsResponse> GetTicketsCosts(SessionContext sessionContext, Guid cityId, DateTime departureDate, DateTime returnDate);
         void InitApplication(SessionContext sessionContext, Guid cardId);
     }
 }

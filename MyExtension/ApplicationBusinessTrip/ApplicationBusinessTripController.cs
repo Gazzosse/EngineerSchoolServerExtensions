@@ -40,5 +40,13 @@ namespace MyExtension.ApplicationBusinessTrip
             return CommonResponse.CreateSuccess(result);
         }
 
+        [HttpPost]
+        public async Task<CommonResponse<GetTicketsCostsResponse>> GetTicketsCosts([FromBody] GetTicketsCostsRequest request)
+        {
+            var sessionContext = _currentObjectContextProvider.GetOrCreateCurrentSessionContext();
+            var result = await _applicationBusinessTripService.GetTicketsCosts(sessionContext, request.CityId, request.DepartureDate, request.ReturnDate);
+            return CommonResponse.CreateSuccess(result);
+        }
+
     }
 }
