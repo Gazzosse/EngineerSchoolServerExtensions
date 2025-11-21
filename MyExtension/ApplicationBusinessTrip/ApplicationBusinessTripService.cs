@@ -91,11 +91,27 @@ namespace MyExtension.ApplicationBusinessTrip
 
             var cityType = baseUniversalService.FindItemTypeWithSameName("Города", null);
 
-            //var cityItem = baseUniversalService.FindItemWithSameName(cityName, cityType);
-            // todo: подумать над тем, как по id искать
-            var cityItem = cityType.Items.FirstOrDefault(x => x.GetObjectId() == cityId);
+            var cityItem = cityType.Items.FirstOrDefault(x => x.GetObjectId() == cityId) 
+                ?? throw new Exception($"Не найден город с ID {cityId}");
 
             var airportCode = (string)cityItem.ItemCard.MainInfo["AirportCode"];
+
+            if (airportCode == "LED")
+            {
+                var responseFlight = new Flight()
+                {
+                    Airline = "00",
+                    FlightNumber = "000",
+                    Price = 0
+                };
+                return new GetTicketsCostsResponse
+                {
+                    Flights = new()
+                    {
+                        responseFlight
+                    }
+                };
+            }
 
             string apiToken = "b165d8c4be5500d4da61df5067fd34ad";
             // Формируем URL для API запроса
@@ -113,7 +129,7 @@ namespace MyExtension.ApplicationBusinessTrip
             string jsonResponse = await response.Content.ReadAsStringAsync();
             var apiResponse = JsonSerializer.Deserialize<ApiResponse>(jsonResponse);
 
-            if (!apiResponse.success)
+            if (apiResponse is null || !apiResponse.success)
             {
                 throw new Exception("API вернуло ошибку");
             }
